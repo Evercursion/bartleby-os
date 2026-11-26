@@ -1,0 +1,27 @@
+{
+  "vault_id": "frozen_vault_eval_v1",
+  "frozen_at_utc": "2026-11-24T16:10:57.912567+00:00",
+  "seed": 20261124,
+  "file": "vault_test.jsonl",
+  "num_cases": 200,
+  "size_bytes": 228505,
+  "sha256": "4a5ed109f852547beff074e7c94c528b068ea549fee9277b365c52dba3cb96d6",
+  "verification": {
+    "total_cases": 200,
+    "solvable_cases": 130,
+    "refusal_cases": 70,
+    "context_overlap_with_train_val_cal": 0,
+    "proposition_overlap_with_train_val_cal": 0,
+    "posture_signature_overlap_with_train_val_cal": 0,
+    "pick_longest_option_solvable_accuracy": 0.1846,
+    "pick_shortest_option_solvable_accuracy": 0.2923,
+    "winning_slot_distribution": {
+      "option_0": 44,
+      "option_1": 29,
+      "option_2": 39,
+      "option_3": 9,
+      "option_4": 5,
+      "option_5": 4
+    }
+  }
+}

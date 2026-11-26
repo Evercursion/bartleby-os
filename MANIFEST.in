@@ -1,0 +1,4 @@
+include README.md
+include LICENSE
+recursive-include artifacts/bartleby-1.2 *.json *.md *.safetensors
+recursive-include schemas *.json

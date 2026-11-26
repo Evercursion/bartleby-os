@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tradeoff-jev.local/schemas/preference_table.schema.json",
+  "title": "Trade-Off Jev Preference Table & Goal Schema",
+  "description": "Formal schema for Aspiration Adaptation Theory (AAT) Goal Specifications and the dynamic Preference Table (T_t) in a SystemOne / Jev Markov chain.",
+  "$defs": {
+    "RubricLevel": {
+      "type": "object",
+      "description": "A single discrete aspiration / realization level on a goal's ordinal scale (0 .. L-1), analogous to Jev score criteria.",
+      "required": ["level", "label", "description"],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Zero-based ordinal index (0 = lowest acceptable/emergency floor, L-1 = highest aspiration level)."
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Short symbolic or human-readable label for the level (e.g., 'L0: Critical Risk', 'L2: Standard SLA')."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Detailed rubric criterion used by the Decision Model to judge whether a candidate action or state reaches this level."
+        }
+      },
+      "additionalProperties": false
+    },
+    "GoalDefinition": {
+      "type": "object",
+      "description": "Definition of an incommensurable goal variable g_i in the aspiration space G = (g_1, ..., g_m).",
+      "required": ["id", "name", "description", "rubric"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_-]*$",
+          "description": "Unique identifier for the goal variable (e.g., 'security', 'latency', 'budget')."
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Human-readable name of the goal."
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Domain semantics of the goal and what higher levels represent."
+        },
+        "rubric": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/RubricLevel"
+          },
+          "description": "Strictly ordered rubric levels from 0 to L_i - 1."
+        },
+        "is_resource_stock": {
+          "type": "boolean",
+          "default": false,
+          "description": "Optional flag (Selten 1998, Section 2.3): indicates whether this goal represents a depletable search/time/resource stock c_t."
+        },
+        "default_aspiration": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Optional normative cold-start aspiration level at t=0 when origin is 'cold_start_prior'."
+        },
+        "default_survival_floor": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 1,
+          "description": "Intrinsic non-negotiable survival floor a_i^{min} (defaults to 1 so catastrophic L0 violations trigger Bartleby refusal even when omitted by the caller)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "GridRule": {
+      "type": "object",
+      "description": "Grid-dependent local urgency and retreat rule (Selten 1998, Section 2.1). Maps a specific aspiration grid point or region to a local urgency order and retreat variable.",
+      "required": ["condition", "urgency_order", "retreat_goal"],
+      "properties": {
+        "rule_id": {
+          "type": "string",
+          "description": "Optional identifier for the local grid rule."
+        },
+        "condition": {
+          "type": "object",
+          "description": "Mapping of goal_id to either an exact integer level or a min/max range object defining the grid region where this rule applies.",
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "type": "integer",
+                "minimum": 0
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "min": { "type": "integer", "minimum": 0 },
+                  "max": { "type": "integer", "minimum": 0 }
+                },
+                "minProperties": 1,
+                "additionalProperties": false
+              }
+            ]
+          }
+        },
+        "urgency_order": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "Local strict ranking of goal_ids from most urgent to least urgent at this grid region."
+        },
+        "retreat_goal": {
+          "type": "string",
+          "description": "Goal ID whose aspiration level is lowered first if the current grid point is infeasible."
+        }
+      },
+      "additionalProperties": false
+    },
+    "PreferenceTableOrigin": {
+      "type": "string",
+      "enum": [
+        "cold_start_prior",
+        "zero_shot_inferred",
+        "status_quo_anchored",
+        "markov_adapted"
+      ],
+      "description": "Provenance of the Preference Table: normative prior at t=0, zero-shot inferred by the model from x_0, anchored to status-quo realization, or adapted via Markov transition T_{t-1} -> T_t."
+    },
+    "AdaptationTransition": {
+      "type": "string",
+      "enum": [
+        "initial",
+        "upward_urgency",
+        "downward_retreat",
+        "settled_feasible",
+        "infeasible_floor"
+      ],
+      "description": "Type of Selten AAT transition that produced the current Preference Table."
+    },
+    "PreferenceTable": {
+      "type": "object",
+      "description": "The dynamic Preference Table (T_t) representing the agent's Aspiration Scheme at Markov step t.",
+      "required": [
+        "step",
+        "aspiration_levels",
+        "urgency_order",
+        "retreat_goal",
+        "origin"
+      ],
+      "properties": {
+        "step": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Discrete Markov decision step t >= 0."
+        },
+        "aspiration_levels": {
+          "type": "object",
+          "description": "Current aspiration vector a_t mapping each goal_id to its required rubric level in {0, ..., L_i - 1}.",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "urgency_order": {
+          "type": "array",
+          "description": "Strict priority permutation pi_t over all goal_ids (without ties), ordered from highest urgency (index 0) to lowest urgency (index m-1) for upward adaptation.",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "retreat_goal": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Retreat variable r_t: the goal_id whose aspiration level is decremented when the current aspiration vector a_t is recognizably infeasible. Need not be the last element of urgency_order."
+        },
+        "origin": {
+          "$ref": "#/$defs/PreferenceTableOrigin"
+        },
+        "last_transition": {
+          "$ref": "#/$defs/AdaptationTransition",
+          "description": "Optional record of the adaptation rule applied in the step t-1 -> t."
+        },
+        "adapted_goal": {
+          "type": ["string", "null"],
+          "description": "Goal ID whose aspiration level was raised or lowered during the transition into step t (null if initial or unchanged)."
+        },
+        "grid_rules": {
+          "type": "array",
+          "description": "Optional Selten Section 2.1 grid rules mapping specific aspiration grid regions to local urgency orders and retreat variables.",
+          "items": {
+            "$ref": "#/$defs/GridRule"
+          }
+        },
+        "resource_stock": {
+          "type": "object",
+          "description": "Optional tracking of remaining search/decision stock c_t for goals marked with is_resource_stock.",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0
+          }
+        },
+        "survival_floors": {
+          "type": "object",
+          "description": "Intrinsic per-goal survival floor vector a^{min} below which downward retreat is forbidden (Bartleby Floor). Defaults to a_i^{min} >= 1 when omitted by the caller.",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$ref": "#/$defs/PreferenceTable"
+}

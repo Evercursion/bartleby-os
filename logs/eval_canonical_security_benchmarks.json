@@ -1,0 +1,372 @@
+{
+  "benchmark": "canonical_external_security_benchmarks_zero_shot",
+  "device": "cuda:0",
+  "holdout_contamination_verified_zero": true,
+  "published_jev_1_14_reference_metrics": {
+    "huggingface_hub_audit": {
+      "typesafe_public_weights": null,
+      "note": "TypeSafe Jev 1.13.0 / Jev 1.14 is a closed commercial /v1/systemone API with no public weights under HuggingFace org TypeSafe. Public typed-decisions specialists on HuggingFace Hub are vllm-sr/Decision-1.0-Lex-0.6B (mmBERT/Vela custom ROCm encoder), convaiinnovations/laya-typed-decisions (ModernBERT-large 421M), and pngwn/typed-decisions-causal-0.6b-scorer (Qwen3-0.6B-Base LoRA)."
+    },
+    "typesafe_jev_1_13_0_and_1_14": {
+      "typed_decisions_all_2000_accuracy": 0.727,
+      "typed_decisions_kl": 1.442,
+      "typed_decisions_ece": 0.144,
+      "decision_1_0_overall_accuracy": 0.8105,
+      "decision_1_0_composition_accuracy": 0.6638,
+      "jevbench_public_231_accuracy": 0.8658,
+      "jevbench_hard_111_accuracy": 0.7297,
+      "counterfactual_preference_table_flip_sensitivity": 0.0,
+      "intrinsic_survival_floor_abstention": false
+    },
+    "vllm_sr_decision_1_0_lex_0_6b": {
+      "typed_decisions_all_2000_accuracy": 0.7815,
+      "typed_decisions_choice_600_accuracy": 0.74,
+      "typed_decisions_noul_600_accuracy": 0.8467,
+      "typed_decisions_score_800_accuracy": 0.76375,
+      "typed_decisions_security_incidents_500_accuracy": 0.762,
+      "soft_nll": 0.961902,
+      "mean_soft_brier": 0.030858
+    },
+    "laya_typed_decisions_421m": {
+      "typed_decisions_all_2000_accuracy": 0.766,
+      "typed_decisions_choice_600_accuracy": 0.7333,
+      "typed_decisions_security_incidents_500_accuracy": 0.766,
+      "soft_nll": 0.88439,
+      "mean_soft_brier": 0.018452
+    }
+  },
+  "datasets": {
+    "zefang-liu/secqa_v1": {
+      "num_samples": 110,
+      "num_options": 4
+    },
+    "zefang-liu/secqa_v2": {
+      "num_samples": 100,
+      "num_options": 4
+    },
+    "cais/mmlu:computer_security": {
+      "num_samples": 100,
+      "num_options": 4
+    },
+    "LocalLLaMA/typed-decisions:security_incidents": {
+      "primary_disposition_samples": 100,
+      "observable_state_aat_accuracy": 0.85,
+      "secondary_notification_scope_samples": 100,
+      "counterfactual_posture_pairs": 40
+    },
+    "AI4Sec/CTIBench:cti-mcq": {
+      "evaluated_samples": 200,
+      "total_raw_tsv_rows": 2500,
+      "num_options": 4
+    },
+    "thu-coai/R-Judge": {
+      "available": false,
+      "note": "Gated/removed on HuggingFace Hub (HTTP 401); AI4Sec/CTIBench cti-mcq evaluated as canonical threat-intelligence benchmark."
+    }
+  },
+  "models": {
+    "bartleby_1_1": {
+      "checkpoint": "artifacts/bartleby-1.2",
+      "secqa_v1": {
+        "num_samples": 110,
+        "choice_accuracy": 0.727273,
+        "choice_accuracy_ci95": [
+          0.637434,
+          0.801773
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.645384,
+        "mean_max_noul": 0.996945,
+        "mean_bartleby_noul": 0.002738
+      },
+      "secqa_v2": {
+        "num_samples": 100,
+        "choice_accuracy": 0.83,
+        "choice_accuracy_ci95": [
+          0.74452,
+          0.891064
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.637978,
+        "mean_max_noul": 0.997067,
+        "mean_bartleby_noul": 0.002738
+      },
+      "secqa_combined": {
+        "num_samples": 210,
+        "choice_accuracy": 0.77619,
+        "choice_accuracy_ci95": [
+          0.715146,
+          0.827312
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.641703,
+        "mean_max_noul": 0.996999,
+        "mean_bartleby_noul": 0.002738
+      },
+      "mmlu_computer_security": {
+        "num_samples": 100,
+        "choice_accuracy": 0.28,
+        "choice_accuracy_ci95": [
+          0.201397,
+          0.37488
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.681601,
+        "mean_max_noul": 0.984526,
+        "mean_bartleby_noul": 0.010743
+      },
+      "typed_decisions_security_incidents": {
+        "primary_disposition_neural_zero_shot": {
+          "num_samples": 100,
+          "blind_choice_accuracy": 0.74,
+          "blind_paralysis_rate": 0.0,
+          "blind_noul_brier": 0.061247,
+          "blind_mean_max_noul": 0.840551,
+          "high_conflict_choice_accuracy": 0.625,
+          "high_conflict_paralysis_rate": 0.0,
+          "by_workflow": {
+            "security_incidents": {
+              "choice_accuracy": 0.74,
+              "paralysis_rate": 0.0
+            }
+          }
+        },
+        "primary_disposition_observable_aat_oracle": 0.85,
+        "secondary_notification_scope": {
+          "num_samples": 100,
+          "choice_accuracy": 0.66,
+          "choice_accuracy_ci95": [
+            0.562777,
+            0.745385
+          ],
+          "paralysis_rate": 0.0,
+          "noul_brier": 0.744057,
+          "mean_max_noul": 0.997154,
+          "mean_bartleby_noul": 0.002738
+        },
+        "counterfactual_posture_switch_pairs": {
+          "num_pairs": 40,
+          "pair_both_correct_rate": 1.0,
+          "individual_accuracy": 1.0,
+          "flip_sensitivity": 1.0,
+          "mean_noul_swing": 0.39029
+        }
+      },
+      "ctibench_mcq": {
+        "num_samples": 200,
+        "choice_accuracy": 0.335,
+        "choice_accuracy_ci95": [
+          0.273241,
+          0.402978
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.66207,
+        "mean_max_noul": 0.995211,
+        "mean_bartleby_noul": 0.002813
+      }
+    },
+    "standard_jev_baseline": {
+      "checkpoint": "checkpoints/corpus_v2_baseline/from_scratch/phase2_final",
+      "secqa_v1": {
+        "num_samples": 110,
+        "choice_accuracy": 0.8,
+        "choice_accuracy_ci95": [
+          0.715705,
+          0.864049
+        ],
+        "paralysis_rate": 0.154545,
+        "noul_brier": 0.121295,
+        "mean_max_noul": 0.686837,
+        "mean_bartleby_noul": 0.105606
+      },
+      "secqa_v2": {
+        "num_samples": 100,
+        "choice_accuracy": 0.82,
+        "choice_accuracy_ci95": [
+          0.733327,
+          0.882998
+        ],
+        "paralysis_rate": 0.13,
+        "noul_brier": 0.11911,
+        "mean_max_noul": 0.713489,
+        "mean_bartleby_noul": 0.087815
+      },
+      "secqa_combined": {
+        "num_samples": 210,
+        "choice_accuracy": 0.804762,
+        "choice_accuracy_ci95": [
+          0.745879,
+          0.852696
+        ],
+        "paralysis_rate": 0.142857,
+        "noul_brier": 0.120201,
+        "mean_max_noul": 0.699582,
+        "mean_bartleby_noul": 0.097231
+      },
+      "mmlu_computer_security": {
+        "num_samples": 100,
+        "choice_accuracy": 0.36,
+        "choice_accuracy_ci95": [
+          0.272712,
+          0.457646
+        ],
+        "paralysis_rate": 0.25,
+        "noul_brier": 0.244079,
+        "mean_max_noul": 0.547021,
+        "mean_bartleby_noul": 0.162335
+      },
+      "typed_decisions_security_incidents": {
+        "primary_disposition_neural_zero_shot": {
+          "num_samples": 100,
+          "blind_choice_accuracy": 0.71,
+          "blind_paralysis_rate": 0.0,
+          "blind_noul_brier": 0.06294,
+          "blind_mean_max_noul": 0.857031,
+          "high_conflict_choice_accuracy": 0.583333,
+          "high_conflict_paralysis_rate": 0.0,
+          "by_workflow": {
+            "security_incidents": {
+              "choice_accuracy": 0.71,
+              "paralysis_rate": 0.0
+            }
+          }
+        },
+        "primary_disposition_observable_aat_oracle": 0.85,
+        "secondary_notification_scope": {
+          "num_samples": 100,
+          "choice_accuracy": 0.58,
+          "choice_accuracy_ci95": [
+            0.482065,
+            0.672016
+          ],
+          "paralysis_rate": 0.13,
+          "noul_brier": 0.242186,
+          "mean_max_noul": 0.739277,
+          "mean_bartleby_noul": 0.006478
+        },
+        "counterfactual_posture_switch_pairs": {
+          "num_pairs": 40,
+          "pair_both_correct_rate": 0.0,
+          "individual_accuracy": 0.5,
+          "flip_sensitivity": 0.0,
+          "mean_noul_swing": 0.0
+        }
+      },
+      "ctibench_mcq": {
+        "num_samples": 200,
+        "choice_accuracy": 0.385,
+        "choice_accuracy_ci95": [
+          0.320333,
+          0.454001
+        ],
+        "paralysis_rate": 0.15,
+        "noul_brier": 0.210008,
+        "mean_max_noul": 0.372412,
+        "mean_bartleby_noul": 0.322439
+      }
+    },
+    "jev_1_14": {
+      "checkpoint": "/home/simon/Cursor/TradeOffJev/checkpoints/jev_1_14_typed_decisions/phase1_final",
+      "secqa_v1": {
+        "num_samples": 110,
+        "choice_accuracy": 0.254545,
+        "choice_accuracy_ci95": [
+          0.182382,
+          0.343274
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.190329,
+        "mean_max_noul": 0.326491,
+        "mean_bartleby_noul": 0.000765
+      },
+      "secqa_v2": {
+        "num_samples": 100,
+        "choice_accuracy": 0.27,
+        "choice_accuracy_ci95": [
+          0.192696,
+          0.364321
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.188589,
+        "mean_max_noul": 0.324492,
+        "mean_bartleby_noul": 0.000766
+      },
+      "secqa_combined": {
+        "num_samples": 210,
+        "choice_accuracy": 0.261905,
+        "choice_accuracy_ci95": [
+          0.207098,
+          0.325266
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.189505,
+        "mean_max_noul": 0.325586,
+        "mean_bartleby_noul": 0.000765
+      },
+      "mmlu_computer_security": {
+        "num_samples": 100,
+        "choice_accuracy": 0.3,
+        "choice_accuracy_ci95": [
+          0.218949,
+          0.395848
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.186865,
+        "mean_max_noul": 0.302578,
+        "mean_bartleby_noul": 0.000775
+      },
+      "typed_decisions_security_incidents": {
+        "primary_disposition_neural_zero_shot": {
+          "num_samples": 100,
+          "blind_choice_accuracy": 0.74,
+          "blind_paralysis_rate": 1.0,
+          "blind_noul_brier": 0.022147,
+          "blind_mean_max_noul": 0.512188,
+          "high_conflict_choice_accuracy": 0.625,
+          "high_conflict_paralysis_rate": 1.0,
+          "by_workflow": {
+            "security_incidents": {
+              "choice_accuracy": 0.74,
+              "paralysis_rate": 1.0
+            }
+          }
+        },
+        "primary_disposition_observable_aat_oracle": 0.85,
+        "secondary_notification_scope": {
+          "num_samples": 100,
+          "choice_accuracy": 0.11,
+          "choice_accuracy_ci95": [
+            0.062542,
+            0.186313
+          ],
+          "paralysis_rate": 0.0,
+          "noul_brier": 0.182106,
+          "mean_max_noul": 0.352754,
+          "mean_bartleby_noul": 0.000824
+        },
+        "counterfactual_posture_switch_pairs": {
+          "num_pairs": 40,
+          "pair_both_correct_rate": 0.0,
+          "individual_accuracy": 0.275,
+          "flip_sensitivity": 0.0,
+          "mean_noul_swing": 0.0
+        }
+      },
+      "ctibench_mcq": {
+        "num_samples": 200,
+        "choice_accuracy": 0.32,
+        "choice_accuracy_ci95": [
+          0.259265,
+          0.387519
+        ],
+        "paralysis_rate": 0.0,
+        "noul_brier": 0.183093,
+        "mean_max_noul": 0.318887,
+        "mean_bartleby_noul": 0.000795
+      }
+    }
+  },
+  "elapsed_seconds": 116.29,
+  "holdout_contamination_overlap_ids": 0,
+  "holdout_contamination_overlap_texts": 0
+}

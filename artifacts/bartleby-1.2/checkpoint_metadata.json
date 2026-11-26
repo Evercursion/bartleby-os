@@ -1,0 +1,45 @@
+{
+  "system_type": "tradeoff_jev",
+  "backbone_config": {
+    "model_name_or_path": "Qwen/Qwen3-0.6B",
+    "torch_dtype": "bfloat16",
+    "max_seq_length": 768,
+    "pooling_strategy": "span_end_and_mean",
+    "use_lora": true,
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ],
+    "gradient_checkpointing": true,
+    "trust_remote_code": false
+  },
+  "aat_config": {
+    "num_goals": 4,
+    "num_levels": 5,
+    "hidden_dim": 128,
+    "pointer_dim": 64,
+    "temperature": 0.25,
+    "survival_sharpness": 10.0,
+    "seed": 42
+  },
+  "parameter_summary": {
+    "total_parameters": 606355095,
+    "backbone_frozen_parameters": 596049920,
+    "lora_trainable_parameters": 10092544,
+    "head_fp32_trainable_parameters": 212631,
+    "all_trainable_parameters": 10305175
+  },
+  "extra": {
+    "run_name": "from_scratch",
+    "global_step": 100,
+    "tag": "phase2_final"
+  }
+}

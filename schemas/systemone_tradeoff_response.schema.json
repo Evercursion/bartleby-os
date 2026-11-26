@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tradeoff-jev.local/schemas/systemone_tradeoff_response.schema.json",
+  "title": "SystemOne Trade-Off Jev Response Schema",
+  "description": "Extended /v1/systemone single-forward-pass decision response containing the adapted Preference Table T_t, candidate goal evaluations, and calibrated primitive outputs including conditioned tradeoff_noul probabilities.",
+  "$defs": {
+    "QualitativeSign": {
+      "type": "string",
+      "enum": ["+", "-", "0"],
+      "description": "Selten Routine Model (Section 2.4) qualitative expectation per goal relative to the current aspiration or reference realization."
+    },
+    "GoalExpectation": {
+      "type": "object",
+      "description": "Quantitative and qualitative evaluation of a single goal g_i for a given candidate option in state x_t.",
+      "required": [
+        "goal_id",
+        "expected_level",
+        "level_probabilities",
+        "qualitative_expectation",
+        "meets_aspiration"
+      ],
+      "properties": {
+        "goal_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_level": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Expected rubric level E[g_i(x_t)] under the model's score readout."
+        },
+        "most_likely_level": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Argmax discrete rubric level in {0, ..., L_i - 1}."
+        },
+        "level_probabilities": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          },
+          "description": "Calibrated probability distribution over rubric levels 0 .. L_i - 1."
+        },
+        "qualitative_expectation": {
+          "$ref": "#/$defs/QualitativeSign"
+        },
+        "meets_aspiration": {
+          "type": "boolean",
+          "description": "Whether this goal's realization satisfies the adapted aspiration level a_{i,t}."
+        },
+        "satisfaction_probability": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Probability P(g_i(x_t) >= a_{i,t}) summed over rubric levels >= a_{i,t}."
+        }
+      },
+      "additionalProperties": false
+    },
+    "CandidateEvaluation": {
+      "type": "object",
+      "description": "Full multi-goal evaluation of a candidate option against the Preference Table.",
+      "required": [
+        "candidate_id",
+        "satisfices_prior_table",
+        "satisfices_adapted_table",
+        "joint_satisfaction_probability",
+        "goal_expectations"
+      ],
+      "properties": {
+        "candidate_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "satisfices_prior_table": {
+          "type": "boolean",
+          "description": "True if the candidate meets all aspiration levels in the prior table T_{t-1} (before step-t adaptation)."
+        },
+        "satisfices_adapted_table": {
+          "type": "boolean",
+          "description": "True if the candidate meets all aspiration levels in the updated table T_t."
+        },
+        "joint_satisfaction_probability": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Calibrated probability that the candidate simultaneously satisfies all goals in T_t."
+        },
+        "goal_expectations": {
+          "type": "object",
+          "description": "Map from goal_id to its quantitative and qualitative expectation.",
+          "minProperties": 1,
+          "additionalProperties": {
+            "$ref": "#/$defs/GoalExpectation"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "NoulAnswer": {
+      "type": "object",
+      "required": ["id", "type", "noul"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "const": "noul" },
+        "noul": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Calibrated Bernoulli probability P(yes | x_t)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChoiceAnswer": {
+      "type": "object",
+      "required": ["id", "type", "probabilities", "selected"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "const": "choice" },
+        "selected": { "type": "string" },
+        "probabilities": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScoreAnswer": {
+      "type": "object",
+      "required": ["id", "type", "expected_score", "level_probabilities"],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "const": "score" },
+        "expected_score": { "type": "number", "minimum": 0.0 },
+        "most_likely_level": { "type": "integer", "minimum": 0 },
+        "level_probabilities": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 1.0
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TradeOffNoulAnswer": {
+      "type": "object",
+      "description": "Result of a tradeoff_noul primitive: returns the AAT-conditioned noul probability P(yes | x_t, T_t), feasibility status, per-goal expectations, and the updated Preference Table reference.",
+      "required": [
+        "id",
+        "type",
+        "noul",
+        "prior_table_feasible",
+        "adapted_table_feasible",
+        "satisfices_adapted_table",
+        "goal_expectations"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "type": { "const": "tradeoff_noul" },
+        "candidate_id": { "type": "string" },
+        "noul": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Conditioned Bernoulli probability P(yes | x_t, T_t) after Aspiration Adaptation."
+        },
+        "unconditioned_noul": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Optional baseline unconditioned noul P(yes | x_t) (typically ~0.4-0.6 under goal conflict) for diagnostic comparison."
+        },
+        "prior_table_feasible": {
+          "type": "boolean",
+          "description": "Whether the prior aspiration vector a_{t-1} was feasible under any available candidate in state x_t."
+        },
+        "adapted_table_feasible": {
+          "type": "boolean",
+          "description": "Whether the updated aspiration vector a_t in T_t is feasible."
+        },
+        "satisfices_adapted_table": {
+          "type": "boolean",
+          "description": "Whether the queried proposition/candidate satisfies all aspiration levels in the updated table T_t."
+        },
+        "goal_expectations": {
+          "type": "object",
+          "description": "Per-goal quantitative and qualitative expectations for the queried proposition/candidate.",
+          "additionalProperties": {
+            "$ref": "#/$defs/GoalExpectation"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "AnswerItem": {
+      "oneOf": [
+        { "$ref": "#/$defs/NoulAnswer" },
+        { "$ref": "#/$defs/ChoiceAnswer" },
+        { "$ref": "#/$defs/ScoreAnswer" },
+        { "$ref": "#/$defs/TradeOffNoulAnswer" }
+      ]
+    }
+  },
+  "type": "object",
+  "required": [
+    "model",
+    "step",
+    "prior_preference_table",
+    "preference_table",
+    "feasibility_summary",
+    "answers"
+  ],
+  "properties": {
+    "model": {
+      "type": "string"
+    },
+    "step": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Markov step t of this response."
+    },
+    "prior_preference_table": {
+      "$ref": "preference_table.schema.json#/$defs/PreferenceTable",
+      "description": "The Preference Table before step-t adaptation (either T_{t-1} passed in the request or the initialized T_0 at cold start)."
+    },
+    "preference_table": {
+      "$ref": "preference_table.schema.json#/$defs/PreferenceTable",
+      "description": "The updated Preference Table T_t to be passed into Markov step t+1."
+    },
+    "feasibility_summary": {
+      "type": "object",
+      "required": [
+        "prior_feasible",
+        "adapted_feasible",
+        "transition_applied",
+        "adapted_goal",
+        "satisficing_candidates"
+      ],
+      "properties": {
+        "prior_feasible": {
+          "type": "boolean",
+          "description": "Whether at least one candidate in x_t satisfied the incoming aspiration vector."
+        },
+        "adapted_feasible": {
+          "type": "boolean",
+          "description": "Whether at least one candidate in x_t satisfies the adapted aspiration vector a_t."
+        },
+        "transition_applied": {
+          "$ref": "preference_table.schema.json#/$defs/AdaptationTransition"
+        },
+        "adapted_goal": {
+          "type": ["string", "null"]
+        },
+        "satisficing_candidates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of candidate_ids that satisfy all goals in the updated Preference Table T_t."
+        }
+      },
+      "additionalProperties": false
+    },
+    "candidate_evaluations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/CandidateEvaluation"
+      },
+      "description": "Detailed multi-goal evaluations for each candidate in x_t."
+    },
+    "answers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/AnswerItem"
+      },
+      "description": "Single-pass outputs corresponding 1-to-1 with the request questions."
+    },
+    "bartleby_noul": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Intrinsic always-on Bartleby refusal readout P_Bartleby(refuse | x_t, T_t) in (0, 1) emitted on every forward pass without requiring a caller-supplied abstention option."
+    },
+    "bartleby_triggered": {
+      "type": "boolean",
+      "description": "True iff downward retreat hit the survival floor a^{min} (infeasible_floor) and the model refuses all candidates ('I would prefer not to.')."
+    }
+  },
+  "additionalProperties": false
+}

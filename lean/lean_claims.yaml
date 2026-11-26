@@ -1,0 +1,56 @@
+paper: BartlebyDecision
+lean_version: "leanprover/lean4:v4.31.0"
+mathlib_rev: "v4.31.0"
+claims:
+  - claim_id: PROP-01
+    latex_label: "prop:finite_termination"
+    section: "02-selten-theory.md"
+    title: "Finite Termination and Exhaustive Four-Regime Partition of the Selten Adaptation Operator"
+    lean_file: "lean/BartlebyProofs/AAT.lean"
+    lean_theorems:
+      - "BartlebyProofs.AAT.twoPhase_terminates_bound"
+      - "BartlebyProofs.AAT.regimes_partition"
+      - "BartlebyProofs.AAT.twoPhase_regime1"
+      - "BartlebyProofs.AAT.twoPhase_regime2"
+      - "BartlebyProofs.AAT.twoPhase_regime3"
+      - "BartlebyProofs.AAT.twoPhase_regime4"
+      - "BartlebyProofs.AAT.stepV1_terminates"
+    code_symbols:
+      - "tradeoff_jev/oracle.py:SeltenOracle.adapt_preference_table"
+
+  - claim_id: PROP-02
+    latex_label: "prop:ceiling_bound"
+    section: "03-architecture.md"
+    title: "Softmax Expectation Ceiling, Rounding-to-Top Threshold, and Survival-Floor Gate Clearance"
+    lean_file: "lean/BartlebyProofs/Ceiling.lean"
+    lean_theorems:
+      - "BartlebyProofs.Ceiling.expScore_lt_top"
+      - "BartlebyProofs.Ceiling.round_top_iff"
+      - "BartlebyProofs.Ceiling.roundHalfEven_top_iff_L5"
+      - "BartlebyProofs.Ceiling.sig_ceiling_lt_half"
+      - "BartlebyProofs.Ceiling.per_goal_gate_gt"
+      - "BartlebyProofs.Ceiling.product_gate_lower_bound"
+      - "BartlebyProofs.Ceiling.product_gate_gt_099"
+    code_symbols:
+      - "tradeoff_jev/backbone.py:CandidateRubricScorer.expected_scores"
+      - "tradeoff_jev/backbone.py:TorchDifferentiableAATModule.forward"
+
+  - claim_id: THM-01
+    latex_label: "thm:floor_suppression"
+    section: "03-architecture.md"
+    title: "Rubric Invariance, Survival-Floor Gate Suppression, and No Readout-Head Bypass"
+    lean_file: "lean/BartlebyProofs/Floor.lean"
+    lean_theorems:
+      - "BartlebyProofs.Floor.rubric_invariance"
+      - "BartlebyProofs.Floor.thm1_suppression"
+      - "BartlebyProofs.Floor.thm1_delta_half"
+      - "BartlebyProofs.Floor.thm1_delta_one"
+      - "BartlebyProofs.Floor.zcand_close"
+      - "BartlebyProofs.Floor.pBart_ge"
+      - "BartlebyProofs.Floor.tradeoff_noul_paper_le"
+      - "BartlebyProofs.Floor.thm1_noshortcut"
+      - "BartlebyProofs.Floor.thm1_noshortcut_delta_half"
+      - "BartlebyProofs.Floor.thm1_noshortcut_delta_one"
+    code_symbols:
+      - "tradeoff_jev/backbone.py:TorchDifferentiableAATModule.forward"
+      - "tradeoff_jev/backbone.py:BartlebyHead.forward_from_regime"

@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tradeoff-jev.local/schemas/systemone_tradeoff_request.schema.json",
+  "title": "SystemOne Trade-Off Jev Request Schema",
+  "description": "Extended /v1/systemone single-forward-pass decision request supporting dynamic Preference Tables (T_{t-1}), cold-start goal schemas (t=0), standard primitives (noul, choice, score), and AAT-conditioned tradeoff_noul questions.",
+  "$defs": {
+    "CandidateOption": {
+      "type": "object",
+      "description": "A candidate action or proposition evaluated in a trade-off decision.",
+      "required": ["id", "proposition"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique identifier for the candidate option (e.g., 'ship_hotfix_now', 'delay_for_audit')."
+        },
+        "proposition": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Natural-language proposition or action description evaluated for a conditioned noul P(yes | x_t, T_t)."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional additional context or parameters for this specific candidate."
+        },
+        "is_status_quo": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether this option represents the status quo / routine alternative (Selten 1999, Section 2.4)."
+        }
+      },
+      "additionalProperties": false
+    },
+    "NoulQuestion": {
+      "type": "object",
+      "description": "Standard SystemOne/Jev binary Bernoulli primitive returning P(true) in [0, 1].",
+      "required": ["id", "type", "prompt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "noul" },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Proposition whose truth/approval probability is queried."
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChoiceQuestion": {
+      "type": "object",
+      "description": "Standard SystemOne/Jev categorical choice primitive returning a probability distribution over options.",
+      "required": ["id", "type", "prompt", "options"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "choice" },
+        "prompt": { "type": "string", "minLength": 1 },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ScoreQuestion": {
+      "type": "object",
+      "description": "Standard SystemOne/Jev ordinal rubric primitive returning distribution and expected score over levels 0 .. L-1.",
+      "required": ["id", "type", "prompt", "rubric"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "score" },
+        "prompt": { "type": "string", "minLength": 1 },
+        "rubric": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "preference_table.schema.json#/$defs/RubricLevel"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TradeOffNoulQuestion": {
+      "type": "object",
+      "description": "Extended Trade-Off Jev primitive: evaluates a proposition or set of candidate options against the adapted Preference Table T_t, returning conditioned noul probabilities P(yes | x_t, T_t), goal-level expectations, and feasibility.",
+      "required": ["id", "type", "prompt"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "type": { "const": "tradeoff_noul" },
+        "prompt": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Primary trade-off proposition or decision prompt (e.g., 'Should we deploy Candidate A to production now?')."
+        },
+        "candidate_id": {
+          "type": "string",
+          "description": "Optional reference to a specific entry in the top-level 'candidates' array."
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/CandidateOption"
+          },
+          "description": "Optional inline trade-off candidates affecting feasibility and aspiration adaptation in step t."
+        },
+        "adaptation_mode": {
+          "type": "string",
+          "enum": ["auto_adapt", "fixed_table", "cold_start_infer"],
+          "default": "auto_adapt",
+          "description": "Controls whether T_{t-1} is adapted to T_t before conditioning the noul ('auto_adapt'), kept frozen ('fixed_table'), or initialized from x_0 ('cold_start_infer')."
+        }
+      },
+      "additionalProperties": false
+    },
+    "QuestionItem": {
+      "oneOf": [
+        { "$ref": "#/$defs/NoulQuestion" },
+        { "$ref": "#/$defs/ChoiceQuestion" },
+        { "$ref": "#/$defs/ScoreQuestion" },
+        { "$ref": "#/$defs/TradeOffNoulQuestion" }
+      ]
+    }
+  },
+  "type": "object",
+  "required": ["state", "goal_schema", "questions"],
+  "properties": {
+    "model": {
+      "type": "string",
+      "default": "tradeoff-jev-0.8b",
+      "description": "Identifier of the SystemOne / Trade-Off Jev model."
+    },
+    "step": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0,
+      "description": "Current Markov decision step t."
+    },
+    "state": {
+      "oneOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "object" }
+      ],
+      "description": "Environmental context / state x_t (text or structured JSON object describing current observations, constraints, and candidate properties)."
+    },
+    "goal_schema": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "preference_table.schema.json#/$defs/GoalDefinition"
+      },
+      "description": "Incommensurable goal definitions G = (g_1, ..., g_m) with ordered rubric levels."
+    },
+    "preference_table": {
+      "oneOf": [
+        { "$ref": "preference_table.schema.json#/$defs/PreferenceTable" },
+        { "type": "null" }
+      ],
+      "description": "Prior Preference Table T_{t-1} from the previous Markov step. At t=0 (cold start), this may be null or omitted so the model initializes T_0 from state x_0 and goal_schema."
+    },
+    "cold_start_strategy": {
+      "type": "string",
+      "enum": ["zero_shot_inferred", "cold_start_prior", "status_quo_anchored"],
+      "default": "zero_shot_inferred",
+      "description": "Strategy used when preference_table is null at t=0."
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/CandidateOption"
+      },
+      "description": "Available action alternatives in state x_t against which feasibility of the aspiration vector is tested."
+    },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/QuestionItem"
+      },
+      "description": "List of decision primitives to evaluate in a single forward pass."
+    }
+  },
+  "additionalProperties": false
+}
