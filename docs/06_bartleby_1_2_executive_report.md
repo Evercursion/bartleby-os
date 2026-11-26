@@ -2,7 +2,7 @@
 
 *Separating Factual Risk Perception from Dynamic Policy Algebra in Single-Pass Decision Models*
 
-**Dr. Simon Hegelich, Dr. Habiba Sarhan, Dr. Morteza Shahrezaye, Kolja Hegelich, Dr. Ralf Schneider · Evercursion · simon.hegelich@evercursion.ai**
+**Dr. Simon Hegelich, Dr. Habiba Sarhan, Dr. Morteza Shahrezaye, Kolja Hegelich, Dr. Ralf Schneider · Evercursion · [github.com/Evercursion/bartleby-os](https://github.com/Evercursion/bartleby-os) · simon.hegelich@evercursion.ai**
 
 ---
 
