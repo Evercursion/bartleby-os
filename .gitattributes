@@ -1,0 +1,13 @@
+# Keep LF line endings on every platform. SHA-256 checksums of data files (corpus manifests,
+# frozen vault) are computed over LF bytes; Git's Windows default (core.autocrlf=true) would
+# otherwise check them out as CRLF and break the hashes.
+* text=auto eol=lf
+
+# Binary files: never touch.
+*.pdf binary
+*.safetensors binary
+*.gz binary
+*.png binary
+
+# Third-party download stored with its original CRLF bytes: keep byte-identical.
+data/raw/canonical_security/cti_mcq.tsv -text
