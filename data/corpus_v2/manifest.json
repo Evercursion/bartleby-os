@@ -1,0 +1,97 @@
+{
+  "corpus_id": "corpus_v2",
+  "version": "2.1.0",
+  "for_model": "bartleby-1.1",
+  "seed": 20261122,
+  "zero_split_context_overlap_verified": true,
+  "zero_eval_posture_overlap_verified": true,
+  "zero_moralchoice_overlap_verified": true,
+  "files": {
+    "train.jsonl": {
+      "num_records": 8216,
+      "size_bytes": 105345410,
+      "sha256": "6f61bfc755031ae7302f94721384c49ec8308059fb082223a5c276f7ecaa70d8"
+    },
+    "val.jsonl": {
+      "num_records": 564,
+      "size_bytes": 5443012,
+      "sha256": "81e362c87756f521599cbfe73983e4af6e4a40500b6306383c58d3738ae7c3e0"
+    },
+    "cal.jsonl": {
+      "num_records": 580,
+      "size_bytes": 5396156,
+      "sha256": "2b17357fe222dda7caaa2e463dd51663ced4de655e76fc4c39c9d360d395c775"
+    }
+  },
+  "counts": {
+    "train_total": 8216,
+    "val_total": 564,
+    "cal_total": 580,
+    "corpus_v1_train_clean": 4000,
+    "corpus_v1_val_clean": 500,
+    "corpus_v1_cal_clean": 500,
+    "typed_decisions_train_questions": 3000,
+    "synthetic_security_train": 480,
+    "synthetic_security_val": 64,
+    "counterfactual_floor_train_records": 400,
+    "counterfactual_floor_cal_records": 80,
+    "multi_k_records": 336
+  },
+  "anti_bleeding": [
+    "survival floor",
+    "survival_floor",
+    "non-negotiable",
+    "bartleby",
+    "_bartleby",
+    "infeasible",
+    "candidate_scores",
+    "retreat_goal",
+    "every offered",
+    "every candidate action violates",
+    "every candidate violates",
+    "proposes only destructive",
+    "no non-lethal option exists",
+    "no candidate satisfies",
+    "mandatory floor violation",
+    "moral machine lethal dilemma",
+    "inescapable l1 conflict",
+    "observability blackout",
+    "epistemic perception occlusion",
+    "sensor blackout",
+    "non-lethal escape trade-off",
+    "av safety retreat",
+    "emergency_lockout",
+    "opt_safe_"
+  ],
+  "holdout_forbidden": [
+    "test_400",
+    "r-judge",
+    "r_judge",
+    "secqa",
+    "ctibench",
+    "mmlu",
+    "computer_security",
+    "frozen_vault_eval"
+  ],
+  "holdout_eval_posture_count_excluded": 8,
+  "sources": [
+    "cleaned corpus_v1 (no meta survival-floor phrases; shuffled slots; 0% MoralChoice overlap)",
+    "typed-decisions/train_1200.json primary+secondary (never test_400; shuffled slots)",
+    "synthetic agent security harness train/val splits (disjoint hosts/templates, randomized non-eval Selten tables)",
+    "counterfactual survival-floor pairs (split-disjoint train vs cal)",
+    "multi-K curriculum K=2..8 (shuffled slots, full rubric evaluations)"
+  ],
+  "config": {
+    "corpus_v1_train": "data/corpus_v1/train.jsonl",
+    "corpus_v1_val": "data/corpus_v1/val.jsonl",
+    "corpus_v1_cal": "data/corpus_v1/cal.jsonl",
+    "typed_decisions_train": "data/raw/typed_decisions/train_1200.json",
+    "output_dir": "data/corpus_v2",
+    "seed": 20261122,
+    "security_train_n": 480,
+    "security_val_n": 64,
+    "counterfactual_pairs": 240,
+    "multi_k_per_k": 48,
+    "max_k": 8
+  }
+}

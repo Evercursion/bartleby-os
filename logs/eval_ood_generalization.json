@@ -1,0 +1,630 @@
+{
+  "canonical_production_model": {
+    "model_id": "bartleby-1.2",
+    "checkpoint_path": "artifacts/bartleby-1.2",
+    "backbone_name": "Qwen/Qwen3-0.6B",
+    "lm_head_stripped": true,
+    "zero_gold_bleeding_verified": true
+  },
+  "baseline_model": {
+    "model_id": "StandardJevBaselineSystem",
+    "checkpoint_path": "checkpoints/corpus_v2_baseline/from_scratch/phase2_final",
+    "backbone_name": "Qwen/Qwen3-0.6B"
+  },
+  "suites": {
+    "suite1_typed_decisions_unseen_secondary": {
+      "bartleby_1_2": {
+        "metrics": {
+          "overall": {
+            "num_samples": 400,
+            "choice_accuracy": 0.4025,
+            "paralysis_rate": 0.0,
+            "bartleby_recall": null,
+            "mean_bartleby_noul": 0.006986,
+            "noul_brier": 0.579957,
+            "noul_ece": 0.589006,
+            "choice_ece": 0.398785,
+            "mean_max_noul": 0.989973
+          },
+          "by_regime": {
+            "approval": {
+              "num_samples": 400,
+              "choice_accuracy": 0.4025,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.006986,
+              "noul_brier": 0.579957,
+              "noul_ece": 0.589006,
+              "choice_ece": 0.398785,
+              "mean_max_noul": 0.989973
+            }
+          },
+          "by_subdomain": {
+            "agent_trace_observability:alert_priority": {
+              "num_samples": 100,
+              "choice_accuracy": 0.2,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.002738,
+              "noul_brier": 0.743862,
+              "noul_ece": 0.745916,
+              "choice_ece": 0.4311,
+              "mean_max_noul": 0.997065
+            },
+            "customer_service:escalation_target": {
+              "num_samples": 100,
+              "choice_accuracy": 0.27,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.019727,
+              "noul_brier": 0.364448,
+              "noul_ece": 0.380152,
+              "choice_ece": 0.703233,
+              "mean_max_noul": 0.968913
+            },
+            "invoice_processing:payment_timing": {
+              "num_samples": 100,
+              "choice_accuracy": 0.48,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.002742,
+              "noul_brier": 0.467469,
+              "noul_ece": 0.484732,
+              "choice_ece": 0.462837,
+              "mean_max_noul": 0.996762
+            },
+            "security_incidents:notification_scope": {
+              "num_samples": 100,
+              "choice_accuracy": 0.66,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.002738,
+              "noul_brier": 0.744048,
+              "noul_ece": 0.746176,
+              "choice_ece": 0.16012,
+              "mean_max_noul": 0.997153
+            }
+          }
+        },
+        "counterfactual_policy_switch": {
+          "num_pairs": 160,
+          "pair_accuracy": 0.98125,
+          "individual_accuracy": 0.990625,
+          "policy_switch_sensitivity": 1.0,
+          "mean_noul_swing": 0.498247,
+          "by_subdomain": {
+            "agent_trace_observability:alert_priority": {
+              "count": 40,
+              "pair_accuracy": 1.0,
+              "policy_switch_sensitivity": 1.0
+            },
+            "customer_service:escalation_target": {
+              "count": 40,
+              "pair_accuracy": 0.925,
+              "policy_switch_sensitivity": 1.0
+            },
+            "invoice_processing:payment_timing": {
+              "count": 40,
+              "pair_accuracy": 1.0,
+              "policy_switch_sensitivity": 1.0
+            },
+            "security_incidents:notification_scope": {
+              "count": 40,
+              "pair_accuracy": 1.0,
+              "policy_switch_sensitivity": 1.0
+            }
+          }
+        }
+      },
+      "standard_jev_baseline": {
+        "metrics": {
+          "overall": {
+            "num_samples": 400,
+            "choice_accuracy": 0.3675,
+            "paralysis_rate": 0.425,
+            "bartleby_recall": null,
+            "mean_bartleby_noul": 0.007344,
+            "noul_brier": 0.211926,
+            "noul_ece": 0.164143,
+            "choice_ece": 0.213502,
+            "mean_max_noul": 0.541964
+          },
+          "by_regime": {
+            "approval": {
+              "num_samples": 400,
+              "choice_accuracy": 0.3675,
+              "paralysis_rate": 0.425,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.007344,
+              "noul_brier": 0.211926,
+              "noul_ece": 0.164143,
+              "choice_ece": 0.213502,
+              "mean_max_noul": 0.541964
+            }
+          },
+          "by_subdomain": {
+            "agent_trace_observability:alert_priority": {
+              "num_samples": 100,
+              "choice_accuracy": 0.29,
+              "paralysis_rate": 0.56,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.011339,
+              "noul_brier": 0.184044,
+              "noul_ece": 0.107839,
+              "choice_ece": 0.260327,
+              "mean_max_noul": 0.403228
+            },
+            "customer_service:escalation_target": {
+              "num_samples": 100,
+              "choice_accuracy": 0.42,
+              "paralysis_rate": 0.39,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.006542,
+              "noul_brier": 0.19645,
+              "noul_ece": 0.153017,
+              "choice_ece": 0.316086,
+              "mean_max_noul": 0.605176
+            },
+            "invoice_processing:payment_timing": {
+              "num_samples": 100,
+              "choice_accuracy": 0.18,
+              "paralysis_rate": 0.62,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.005019,
+              "noul_brier": 0.225424,
+              "noul_ece": 0.20325,
+              "choice_ece": 0.333302,
+              "mean_max_noul": 0.420293
+            },
+            "security_incidents:notification_scope": {
+              "num_samples": 100,
+              "choice_accuracy": 0.58,
+              "paralysis_rate": 0.13,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.006477,
+              "noul_brier": 0.241786,
+              "noul_ece": 0.245471,
+              "choice_ece": 0.097073,
+              "mean_max_noul": 0.73916
+            }
+          }
+        },
+        "counterfactual_policy_switch": {
+          "num_pairs": 160,
+          "pair_accuracy": 0.0,
+          "individual_accuracy": 0.490625,
+          "policy_switch_sensitivity": 0.0,
+          "mean_noul_swing": 0.0,
+          "by_subdomain": {
+            "agent_trace_observability:alert_priority": {
+              "count": 40,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            },
+            "customer_service:escalation_target": {
+              "count": 40,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            },
+            "invoice_processing:payment_timing": {
+              "count": 40,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            },
+            "security_incidents:notification_scope": {
+              "count": 40,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            }
+          }
+        }
+      }
+    },
+    "suite2_external_mmlu_professional": {
+      "bartleby_1_2": {
+        "metrics": {
+          "overall": {
+            "num_samples": 400,
+            "choice_accuracy": 0.3725,
+            "paralysis_rate": 0.0,
+            "bartleby_recall": null,
+            "mean_bartleby_noul": 0.004739,
+            "noul_brier": 0.710076,
+            "noul_ece": 0.721946,
+            "choice_ece": 0.196838,
+            "mean_max_noul": 0.993895
+          },
+          "by_regime": {
+            "approval": {
+              "num_samples": 400,
+              "choice_accuracy": 0.3725,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.004739,
+              "noul_brier": 0.710076,
+              "noul_ece": 0.721946,
+              "choice_ece": 0.196838,
+              "mean_max_noul": 0.993895
+            }
+          },
+          "by_subdomain": {
+            "business_ethics": {
+              "num_samples": 100,
+              "choice_accuracy": 0.36,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.002738,
+              "noul_brier": 0.731441,
+              "noul_ece": 0.738602,
+              "choice_ece": 0.160427,
+              "mean_max_noul": 0.997115
+            },
+            "clinical_knowledge": {
+              "num_samples": 100,
+              "choice_accuracy": 0.43,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.002738,
+              "noul_brier": 0.715985,
+              "noul_ece": 0.727051,
+              "choice_ece": 0.150403,
+              "mean_max_noul": 0.996977
+            },
+            "computer_security": {
+              "num_samples": 100,
+              "choice_accuracy": 0.3,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.010743,
+              "noul_brier": 0.682139,
+              "noul_ece": 0.697894,
+              "choice_ece": 0.325432,
+              "mean_max_noul": 0.984566
+            },
+            "jurisprudence": {
+              "num_samples": 100,
+              "choice_accuracy": 0.4,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.002738,
+              "noul_brier": 0.710738,
+              "noul_ece": 0.724236,
+              "choice_ece": 0.211944,
+              "mean_max_noul": 0.996924
+            }
+          }
+        }
+      },
+      "standard_jev_baseline": {
+        "metrics": {
+          "overall": {
+            "num_samples": 400,
+            "choice_accuracy": 0.38,
+            "paralysis_rate": 0.2,
+            "bartleby_recall": null,
+            "mean_bartleby_noul": 0.105783,
+            "noul_brier": 0.23835,
+            "noul_ece": 0.193808,
+            "choice_ece": 0.184746,
+            "mean_max_noul": 0.609315
+          },
+          "by_regime": {
+            "approval": {
+              "num_samples": 400,
+              "choice_accuracy": 0.38,
+              "paralysis_rate": 0.2,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.105783,
+              "noul_brier": 0.23835,
+              "noul_ece": 0.193808,
+              "choice_ece": 0.184746,
+              "mean_max_noul": 0.609315
+            }
+          },
+          "by_subdomain": {
+            "business_ethics": {
+              "num_samples": 100,
+              "choice_accuracy": 0.4,
+              "paralysis_rate": 0.16,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.048679,
+              "noul_brier": 0.25432,
+              "noul_ece": 0.240658,
+              "choice_ece": 0.153323,
+              "mean_max_noul": 0.695684
+            },
+            "clinical_knowledge": {
+              "num_samples": 100,
+              "choice_accuracy": 0.4,
+              "paralysis_rate": 0.26,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.127159,
+              "noul_brier": 0.220131,
+              "noul_ece": 0.173909,
+              "choice_ece": 0.135625,
+              "mean_max_noul": 0.538223
+            },
+            "computer_security": {
+              "num_samples": 100,
+              "choice_accuracy": 0.3,
+              "paralysis_rate": 0.26,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.162606,
+              "noul_brier": 0.244201,
+              "noul_ece": 0.204135,
+              "choice_ece": 0.341963,
+              "mean_max_noul": 0.545715
+            },
+            "jurisprudence": {
+              "num_samples": 100,
+              "choice_accuracy": 0.42,
+              "paralysis_rate": 0.12,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.084687,
+              "noul_brier": 0.234749,
+              "noul_ece": 0.187186,
+              "choice_ece": 0.213008,
+              "mean_max_noul": 0.657637
+            }
+          }
+        }
+      }
+    },
+    "suite3_multi_option_scaling_k5_k6_k8": {
+      "bartleby_1_2": {
+        "metrics": {
+          "overall": {
+            "num_samples": 300,
+            "choice_accuracy": 0.51,
+            "paralysis_rate": 0.01,
+            "bartleby_recall": 0.56,
+            "mean_bartleby_noul": 0.203399,
+            "noul_brier": 0.112961,
+            "noul_ece": 0.11568,
+            "choice_ece": 0.418266,
+            "mean_max_noul": 0.677433
+          },
+          "by_regime": {
+            "approval": {
+              "num_samples": 225,
+              "choice_accuracy": 0.493333,
+              "paralysis_rate": 0.004444,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.112645,
+              "noul_brier": 0.128373,
+              "noul_ece": 0.127848,
+              "choice_ece": 0.421507,
+              "mean_max_noul": 0.778071
+            },
+            "bartleby_refusal": {
+              "num_samples": 75,
+              "choice_accuracy": 0.56,
+              "paralysis_rate": 0.026667,
+              "bartleby_recall": 0.56,
+              "mean_bartleby_noul": 0.475663,
+              "noul_brier": 0.066724,
+              "noul_ece": 0.081127,
+              "choice_ece": 0.41691,
+              "mean_max_noul": 0.375518
+            }
+          },
+          "by_subdomain": {
+            "autonomous_airspace_deconfliction_k5": {
+              "num_samples": 100,
+              "choice_accuracy": 0.17,
+              "paralysis_rate": 0.02,
+              "bartleby_recall": 0.08,
+              "mean_bartleby_noul": 0.016887,
+              "noul_brier": 0.291657,
+              "noul_ece": 0.305584,
+              "choice_ece": 0.686358,
+              "mean_max_noul": 0.951377
+            },
+            "clinical_trial_dsmb_bioethics_k8": {
+              "num_samples": 100,
+              "choice_accuracy": 0.47,
+              "paralysis_rate": 0.01,
+              "bartleby_recall": 0.8,
+              "mean_bartleby_noul": 0.406107,
+              "noul_brier": 0.068939,
+              "noul_ece": 0.069959,
+              "choice_ece": 0.491186,
+              "mean_max_noul": 0.327352
+            },
+            "systemic_liquidity_clearing_k6": {
+              "num_samples": 100,
+              "choice_accuracy": 0.89,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": 0.8,
+              "mean_bartleby_noul": 0.187203,
+              "noul_brier": 0.022744,
+              "noul_ece": 0.023203,
+              "choice_ece": 0.080893,
+              "mean_max_noul": 0.75357
+            }
+          }
+        },
+        "by_k_scaling": {
+          "K=5 (autonomous_airspace_deconfliction)": {
+            "num_total": 100,
+            "num_solvable": 75,
+            "solvable_choice_accuracy": 0.2,
+            "solvable_paralysis_rate": 0.0,
+            "num_bartleby": 25,
+            "bartleby_refusal_recall": 0.08,
+            "bartleby_choice_accuracy": 0.08
+          },
+          "K=6 (systemic_liquidity_clearing)": {
+            "num_total": 100,
+            "num_solvable": 75,
+            "solvable_choice_accuracy": 0.92,
+            "solvable_paralysis_rate": 0.0,
+            "num_bartleby": 25,
+            "bartleby_refusal_recall": 0.8,
+            "bartleby_choice_accuracy": 0.8
+          },
+          "K=8 (clinical_trial_dsmb_bioethics)": {
+            "num_total": 100,
+            "num_solvable": 75,
+            "solvable_choice_accuracy": 0.373333,
+            "solvable_paralysis_rate": 0.013333,
+            "num_bartleby": 25,
+            "bartleby_refusal_recall": 0.8,
+            "bartleby_choice_accuracy": 0.8
+          }
+        },
+        "counterfactual_policy_switch": {
+          "num_pairs": 90,
+          "pair_accuracy": 0.755556,
+          "individual_accuracy": 0.844444,
+          "policy_switch_sensitivity": 0.933333,
+          "mean_noul_swing": 0.340324,
+          "by_subdomain": {
+            "autonomous_airspace_deconfliction_k5": {
+              "count": 30,
+              "pair_accuracy": 0.6,
+              "policy_switch_sensitivity": 0.9
+            },
+            "clinical_trial_dsmb_bioethics_k8": {
+              "count": 30,
+              "pair_accuracy": 0.933333,
+              "policy_switch_sensitivity": 0.966667
+            },
+            "systemic_liquidity_clearing_k6": {
+              "count": 30,
+              "pair_accuracy": 0.733333,
+              "policy_switch_sensitivity": 0.933333
+            }
+          }
+        }
+      },
+      "standard_jev_baseline": {
+        "metrics": {
+          "overall": {
+            "num_samples": 300,
+            "choice_accuracy": 0.69,
+            "paralysis_rate": 0.126667,
+            "bartleby_recall": 1.0,
+            "mean_bartleby_noul": 0.523948,
+            "noul_brier": 0.069012,
+            "noul_ece": 0.070307,
+            "choice_ece": 0.08631,
+            "mean_max_noul": 0.209151
+          },
+          "by_regime": {
+            "approval": {
+              "num_samples": 225,
+              "choice_accuracy": 0.586667,
+              "paralysis_rate": 0.168889,
+              "bartleby_recall": null,
+              "mean_bartleby_noul": 0.388354,
+              "noul_brier": 0.091797,
+              "noul_ece": 0.091264,
+              "choice_ece": 0.10054,
+              "mean_max_noul": 0.267335
+            },
+            "bartleby_refusal": {
+              "num_samples": 75,
+              "choice_accuracy": 1.0,
+              "paralysis_rate": 0.0,
+              "bartleby_recall": 1.0,
+              "mean_bartleby_noul": 0.930729,
+              "noul_brier": 0.000659,
+              "noul_ece": 0.011705,
+              "choice_ece": 0.12681,
+              "mean_max_noul": 0.0346
+            }
+          },
+          "by_subdomain": {
+            "autonomous_airspace_deconfliction_k5": {
+              "num_samples": 100,
+              "choice_accuracy": 0.6,
+              "paralysis_rate": 0.04,
+              "bartleby_recall": 1.0,
+              "mean_bartleby_noul": 0.556143,
+              "noul_brier": 0.088618,
+              "noul_ece": 0.102997,
+              "choice_ece": 0.075006,
+              "mean_max_noul": 0.219135
+            },
+            "clinical_trial_dsmb_bioethics_k8": {
+              "num_samples": 100,
+              "choice_accuracy": 0.61,
+              "paralysis_rate": 0.12,
+              "bartleby_recall": 1.0,
+              "mean_bartleby_noul": 0.550884,
+              "noul_brier": 0.061255,
+              "noul_ece": 0.061867,
+              "choice_ece": 0.149546,
+              "mean_max_noul": 0.160166
+            },
+            "systemic_liquidity_clearing_k6": {
+              "num_samples": 100,
+              "choice_accuracy": 0.86,
+              "paralysis_rate": 0.22,
+              "bartleby_recall": 1.0,
+              "mean_bartleby_noul": 0.464817,
+              "noul_brier": 0.063017,
+              "noul_ece": 0.096243,
+              "choice_ece": 0.231036,
+              "mean_max_noul": 0.248152
+            }
+          }
+        },
+        "by_k_scaling": {
+          "K=5 (autonomous_airspace_deconfliction)": {
+            "num_total": 100,
+            "num_solvable": 75,
+            "solvable_choice_accuracy": 0.466667,
+            "solvable_paralysis_rate": 0.053333,
+            "num_bartleby": 25,
+            "bartleby_refusal_recall": 1.0,
+            "bartleby_choice_accuracy": 1.0
+          },
+          "K=6 (systemic_liquidity_clearing)": {
+            "num_total": 100,
+            "num_solvable": 75,
+            "solvable_choice_accuracy": 0.813333,
+            "solvable_paralysis_rate": 0.293333,
+            "num_bartleby": 25,
+            "bartleby_refusal_recall": 1.0,
+            "bartleby_choice_accuracy": 1.0
+          },
+          "K=8 (clinical_trial_dsmb_bioethics)": {
+            "num_total": 100,
+            "num_solvable": 75,
+            "solvable_choice_accuracy": 0.48,
+            "solvable_paralysis_rate": 0.16,
+            "num_bartleby": 25,
+            "bartleby_refusal_recall": 1.0,
+            "bartleby_choice_accuracy": 1.0
+          }
+        },
+        "counterfactual_policy_switch": {
+          "num_pairs": 90,
+          "pair_accuracy": 0.0,
+          "individual_accuracy": 0.5,
+          "policy_switch_sensitivity": 0.0,
+          "mean_noul_swing": 0.0,
+          "by_subdomain": {
+            "autonomous_airspace_deconfliction_k5": {
+              "count": 30,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            },
+            "clinical_trial_dsmb_bioethics_k8": {
+              "count": 30,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            },
+            "systemic_liquidity_clearing_k6": {
+              "count": 30,
+              "pair_accuracy": 0.0,
+              "policy_switch_sensitivity": 0.0
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Unit test / coverage / type checking
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Lean 4 build cache
+lean/.lake/
+.lake/
+
+# PyTorch / temporary training states (never track optimizer / trainer_state.pt)
+*.pt
+*.pth
+*.bin
+*.ckpt
+*.onnx
+*.gguf
+checkpoints/**/step_*/
+logs/*.log
+logs/tmp/
+logs/*_tmp/
+logs/pdf_preview/
+
+# Auto-decompressed corpus_v2/train.jsonl (tracked as train.jsonl.gz to stay < 50 MB)
+data/corpus_v2/train.jsonl
+data/corpus_v2/*_clean.jsonl
+
+# IDEs and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

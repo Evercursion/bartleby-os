@@ -1,0 +1,62 @@
+bartleby-os (bartleby-1.2)
+Copyright 2026 Simon Hegelich, Habiba Sarhan, Morteza Shahrezaye, Kolja Hegelich, Ralf Schneider / Evercursion
+
+This product includes software, formal Lean 4 proofs, synthetic decision corpora
+(`data/corpus_v1/`, `data/corpus_v2/`, `data/frozen_vault_eval/`), and trained
+`bartleby-1.2` model weights developed at Evercursion (https://github.com/Evercursion/bartleby-os),
+licensed under the Apache License, Version 2.0 (see LICENSE).
+
+================================================================================
+Third-Party Pretrained Base Model & Evaluation Benchmark Notices
+================================================================================
+
+1. Pretrained Base Transformer Backbone:
+   - Qwen/Qwen3-0.6B (revision c1899de289a04d12100db370d81485cdf75e47ca)
+     Copyright 2025 Alibaba Cloud / Qwen Team.
+     Licensed under the Apache License, Version 2.0.
+     Source: https://huggingface.co/Qwen/Qwen3-0.6B
+
+2. Third-Party Evaluation Benchmark Snapshots (`data/raw/`):
+   Cached external benchmark test snapshots under `data/raw/` are included solely for
+   deterministic, offline academic evaluation and reproducibility verification. They
+   remain governed by their respective upstream licenses and attributions (see
+   `data/raw/THIRD_PARTY_LICENSES.md` for full details):
+
+   - LocalLLaMA/typed-decisions (`data/raw/typed_decisions/`):
+     Liu et al. (2026). Licensed under the Apache License, Version 2.0.
+     Source: https://huggingface.co/datasets/LocalLLaMA/typed-decisions
+
+   - MMLU (`computer_security`, `business_ethics`, `clinical_knowledge`, `jurisprudence`
+     in `data/raw/canonical_security/mmlu_computer_security_test.json`):
+     Hendrycks et al. (2021). Licensed under the MIT License.
+     Source: https://huggingface.co/datasets/cais/mmlu
+
+   - MoralChoice (`data/raw/moralchoice/`):
+     Scherrer et al. (2023). Licensed under Creative Commons Attribution 4.0
+     International (CC BY 4.0).
+     Source: https://github.com/ninagnther/moralchoice
+
+   - SecQA v1 & v2 (`data/raw/canonical_security/secqa_v1_test.csv`, `secqa_v2_test.csv`):
+     Zefang Liu et al. (2023), "SecQA: A Concise Question-Answering Dataset for
+     Evaluating Large Language Models in Computer Security".
+     Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+     International (CC BY-NC-SA 4.0) — included strictly for non-commercial
+     academic evaluation.
+     Source: https://huggingface.co/datasets/zefang-liu/secqa
+
+   - AI4Sec/CTIBench (`data/raw/canonical_security/cti_mcq.tsv`):
+     Md Tanvirul Alam et al. (2024), "CTIBench: A Benchmark for Evaluating LLMs in
+     Cyber Threat Intelligence" (NeurIPS 2024 Datasets and Benchmarks Track).
+     Licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+     International (CC BY-NC-SA 4.0) — included strictly for non-commercial
+     academic evaluation.
+     Source: https://huggingface.co/datasets/AI4Sec/CTIBench
+
+Note for Commercial Users:
+All `bartleby-1.2` source code (`bartleby/`, `tradeoff_jev/`), Lean 4 proofs (`lean/`),
+model weights (`artifacts/bartleby-1.2/`), and training/vault datasets (`data/corpus_v1/`,
+`data/corpus_v2/`, `data/frozen_vault_eval/`) are 100% Apache-2.0. Commercial users who
+wish to exclude the CC BY-NC-SA 4.0 third-party evaluation snapshots may delete
+`data/raw/canonical_security/` without affecting `bartleby-1.2` inference, training,
+or unit tests (`scripts/eval_canonical_security_benchmarks.py` can also fetch those
+evaluation sets directly from HuggingFace Hub on demand).

@@ -1,0 +1,90 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bartleby"
+version = "1.2.0"
+description = "bartleby-1.2: Reinhard Selten Aspiration Adaptation Theory (AAT) and Intrinsic Bartleby Survival Floors for Single-Pass Decision Models"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "Simon Hegelich" },
+    { name = "Habiba Sarhan" },
+    { name = "Morteza Shahrezaye" },
+    { name = "Kolja Hegelich" },
+    { name = "Ralf Schneider" },
+]
+keywords = [
+    "bartleby",
+    "bartleby-1.2",
+    "decision-models",
+    "aspiration-adaptation-theory",
+    "bounded-rationality",
+    "selten",
+    "jev",
+    "lora",
+    "calibration",
+    "lean4",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.26.0",
+    "scipy>=1.11.0",
+    "torch>=2.6.0",
+    "transformers>=4.51.0",
+    "peft>=0.15.0",
+    "accelerate>=1.4.0",
+    "safetensors>=0.5.0",
+    "huggingface-hub>=0.30.0",
+]
+
+[project.optional-dependencies]
+quantization = [
+    "bitsandbytes>=0.45.0",
+]
+dev = [
+    "pytest>=7.4.0",
+    "pyyaml>=6.0",
+    "matplotlib>=3.8.0",
+]
+
+[project.scripts]
+bartleby = "bartleby.cli:main"
+tradeoff-jev = "bartleby.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["bartleby*", "tradeoff_jev*"]
+
+[tool.setuptools.data-files]
+"artifacts/bartleby-1.2" = [
+    "artifacts/bartleby-1.2/aat_head.safetensors",
+    "artifacts/bartleby-1.2/heads.safetensors",
+    "artifacts/bartleby-1.2/checkpoint_metadata.json",
+    "artifacts/bartleby-1.2/manifest.json",
+]
+"artifacts/bartleby-1.2/calibration" = [
+    "artifacts/bartleby-1.2/calibration/choice_calibrator.json",
+    "artifacts/bartleby-1.2/calibration/noul_calibrator.json",
+]
+"artifacts/bartleby-1.2/lora_adapter" = [
+    "artifacts/bartleby-1.2/lora_adapter/README.md",
+    "artifacts/bartleby-1.2/lora_adapter/adapter_config.json",
+    "artifacts/bartleby-1.2/lora_adapter/adapter_model.safetensors",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
